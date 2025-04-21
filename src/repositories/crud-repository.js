@@ -18,6 +18,12 @@ class CrudRepository {
 				id: data
 			}
 		});
+		if (!response) {
+			throw new AppError(
+				'Not able to fund the resource',
+				StatusCodes.NOT_FOUND
+			);
+		}
 		return response;
 	}
 
@@ -37,13 +43,19 @@ class CrudRepository {
 		return response;
 	}
 
-	async update(data) {
+	async update(data, id) {
 		// data -> {col: value, ...}
 		const response = await this.model.update(data, {
 			where: {
-				id: id
+				id
 			}
 		});
+		if (!response || response[0] === 0) {
+			throw new AppError(
+				'Not able to find the resource',
+				StatusCodes.NOT_FOUND
+			);
+		}
 		return response;
 	}
 }

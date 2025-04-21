@@ -44,8 +44,43 @@ async function getAirplane(req, res) {
 	}
 }
 
+/**
+ * DELETE : /airplanes
+ * req.params.id
+ */
+async function destroyAirplane(req, res) {
+	try {
+		const airplane = await AirplaneService.destroyAirplane(req.params.id);
+		SuccessReponse.data = airplane;
+		return res.status(StatusCodes.OK).json(SuccessReponse);
+	} catch (error) {
+		ErrorResponse.error = error;
+		return res.status(error.statusCode).json(ErrorResponse);
+	}
+}
+
+/**
+ * UPDATE : /airplanes
+ * req.body {modelNumber: 'airbus320', capacity: 200}
+ */
+async function updateAirplane(req, res) {
+	try {
+		const airplane = await AirplaneService.updateAirplane(
+			req.body,
+			req.params.id
+		);
+		SuccessReponse.data = airplane;
+		return res.status(StatusCodes.OK).json(SuccessReponse);
+	} catch (error) {
+		ErrorResponse.error = error;
+		return res.status(error.statusCode).json(ErrorResponse);
+	}
+}
+
 module.exports = {
 	createAirplane,
 	getAirplanes,
-	getAirplane
+	getAirplane,
+	destroyAirplane,
+	updateAirplane
 };
